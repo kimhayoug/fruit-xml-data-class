@@ -8,18 +8,49 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, XMLParserDelegate {
+    var myFruitData = [FruitData]()
+    var dName = ""
+    var dcolor = ""
+    var dcost = ""
+    
+    var currentElement = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        if let path = Bundle.main.url(forResource: "Fruit", withExtension:"xml"){
+            if let myParser = XMLParser(contentsOf:path){
+                if myParser.parse(){
+                    myParser.delegate = self
+                if myParser.
+                    print("파싱 성공")
+                }else{
+                    print("파싱 오류 발생")
+                }
+                }else{
+                    print("")
+            }
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        currentElement = elementName
     }
-
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        let data = string.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+        
+        if !data.isEmpty {
+            switch currentElement {
+            case "name" : dName = data
+            case "color" : dcolor = data
+            case "coat" : dcost = data
+            default : break
+            }
+        }
+    }
+    func parser(_parser: XMLParser, didEndElement elementName: String?, namespaceURL:String?,  )
 
 }
 
