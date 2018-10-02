@@ -23,7 +23,14 @@ class ViewController: UIViewController, XMLParserDelegate {
             if let myParser = XMLParser(contentsOf:path){
                 if myParser.parse(){
                     myParser.delegate = self
-                if myParser.
+                    if myParser.parse(){
+                      //  print(myFruitData[0].name)
+                      //  print(myFruitData[0].color)
+                      //  print(myFruitData[0].cost)
+                        for i in 0 ..< myFruitData.count {
+                            print(myFruitData[i].name)
+                        }
+                    }
                     print("파싱 성공")
                 }else{
                     print("파싱 오류 발생")
@@ -50,7 +57,15 @@ class ViewController: UIViewController, XMLParserDelegate {
             }
         }
     }
-    func parser(_parser: XMLParser, didEndElement elementName: String?, namespaceURL:String?,  )
+    func parser(_parser: XMLParser, didEndElement elementName: String?, namespaceURL:String?,qualifiedName qName: String?){
+        if elementName == "item" {
+            let myItem = FruitData()
+            myItem.name = dName
+            myItem.color = dcolor
+            myItem.coat = dcost
+            myFruitData.append(myItem)
+        }
+    }
 
 }
 
