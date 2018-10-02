@@ -8,7 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, XMLParserDelegate {
+class ViewController: UIViewController, XMLParserDelegate, UITableViewDataSource,
+    UITableViewDelegate{
+    @IBOutlet weak var mytableview: UITableView!
     var myFruitData = [FruitData]()
     var dName = ""
     var dcolor = ""
@@ -29,6 +31,8 @@ class ViewController: UIViewController, XMLParserDelegate {
                       //  print(myFruitData[0].cost)
                         for i in 0 ..< myFruitData.count {
                             print(myFruitData[i].name)
+                            print(myFruitData[i].color)
+                            print(myFruitData[i].coat)
                         }
                     }
                     print("파싱 성공")
@@ -52,12 +56,12 @@ class ViewController: UIViewController, XMLParserDelegate {
             switch currentElement {
             case "name" : dName = data
             case "color" : dcolor = data
-            case "coat" : dcost = data
+            case "cost" : dcost = data
             default : break
             }
         }
     }
-    func parser(_parser: XMLParser, didEndElement elementName: String?, namespaceURL:String?,qualifiedName qName: String?){
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI namespaceURL:String?,qualifiedName qName: String?){
         if elementName == "item" {
             let myItem = FruitData()
             myItem.name = dName
@@ -66,6 +70,21 @@ class ViewController: UIViewController, XMLParserDelegate {
             myFruitData.append(myItem)
         }
     }
-
+   //UITableView Deiegata
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return myFruitData.count
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let myCell = mytableview.dequeueReusableCell(withIdentifier: "RE", for: indexPath)
+        
+        let dName = myCell.viewWithTag(1) as! UILabel
+        let dColor = myCell.viewWithTag(2) as! UILabel
+        let dcost = myCell.viewWithTag(3) as! UILabel
+        dName.text = myFruitData[indexPath.row].name
+        dColor.text = myFruitData[indexPath.row].color
+        dcost.text = myFruitData[indexPath.row].coat
+        
+        return myCell
+    }
 }
 
